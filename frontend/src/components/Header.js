@@ -11,7 +11,7 @@ export const Header = () => {
           <i className="fas fa-bars" />
         </label>
         <ul>
-          <li><a href="/"> <Link to='signup'>Register</Link></a></li>
+          <li><a href="/"> <Link to='login'>Login</Link></a></li>
           <li><a  href="/"><Link to='/'>Home</Link></a></li>
           <li><a href="/"><Link to='profile'>Profile </Link ></a></li>
           <li><a href="/"><Link to='voting'>Voting Area</Link></a></li>
