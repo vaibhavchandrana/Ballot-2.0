@@ -11,12 +11,12 @@ export const Header = () => {
           <i className="fas fa-bars" />
         </label>
         <ul>
-          <li><a href="{% url 'signup' %}">Register</a></li>
-          <li><a className="active" href="{% url 'index' %}">Home</a></li>
-          <li><a href="{% url 'profile' %}">Profile</a></li>
-          <li><a href="{% url 'voting' %}">Voting Area</a></li>
-          <li><a href="{% url 'result' %}">Result</a></li>
-          <li><a href="{% url 'logout' %}">Logout </a></li>
+          <li><a href="/">Register</a></li>
+          <li><a className="active" href="/">Home</a></li>
+          <li><a href="/">Profile</a></li>
+          <li><a href="/">Voting Area</a></li>
+          <li><a href="/">Result</a></li>
+          <li><a href="/">Logout </a></li>
         </ul>
       </nav>
     </div>

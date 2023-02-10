@@ -1,12 +1,12 @@
 import './App.css';
 import { Header } from './components/Header';
-import {Voting} from './components/Voting'
+import {Result} from './components/Result'
 
 function App() {
   return (
     <div className="App">
       <Header/>
-      <Voting/>
+      <Result/>
       {/* <Profile/> */}
       {/* <Home /> */}
     </div>
