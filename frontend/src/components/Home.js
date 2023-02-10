@@ -1,6 +1,6 @@
 import React from 'react'
 import '../css/home.css'
-
+import {Link } from 'react-router-dom'
 export const Home = () => {
     return (
         <div className='home_body'>
@@ -13,7 +13,7 @@ export const Home = () => {
                     <span>Take Charge of
                         Your Vote</span>
                     <p>Upgrade from manually counting ballots to an online election system without sacrificing the integrity of your vote</p>
-                    <button className ="start_btn">Get Started</button>
+                    <Link to ="/login"><button className ="start_btn">Get Started</button></Link>
                 </div>
             </div>
             <div className='feature_div'>
@@ -72,7 +72,6 @@ export const Home = () => {
                         <p className='danger'>This facility is not available right now because of some error at hosting.You will get this feature from my git hub</p>
                         <button className='github_btn'>Check It</button>
                     </div>
-
                 </div>
             </div>
         </div>
