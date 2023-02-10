@@ -2,15 +2,9 @@ import React from 'react'
 import '../css/signin.css'
 
 export const Login = () => {
-    var preloader = document.getElementById("loader");
-         function myFunction(){
-            preloader.style.display = "none";
-         }
+   
     return (
-            <div onload={setTimeout(myFunction, 3000)} className="body" >
-                <div id="loader">
-                    <img src="../images/giphy.gif" alt="loder " id="image" />
-                </div>
+            <div className="body" >
                 <div className="container" >
                     <div className="title">Login</div>
                     <br />
