@@ -11,7 +11,6 @@ export const Home = () => {
                 </div>
                 <div className='content_container'>
                     <span>Take Charge of
-                        <br />
                         Your Vote</span>
                     <p>Upgrade from manually counting ballots to an online election system without sacrificing the integrity of your vote</p>
                     <button className ="start_btn">Get Started</button>

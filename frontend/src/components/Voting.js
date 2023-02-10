@@ -18,7 +18,6 @@ export const Voting = () => {
                     </div>
                     <div className="detail">
                         <p id="big">Barak Obama</p>
-                        <br />
                         <p id="small">Republican party</p>
                     </div>
                     <div className="voting-button">
@@ -33,7 +32,6 @@ export const Voting = () => {
                     </div>
                     <div className="detail">
                         <p id="big">Donald Trump</p>
-                        <br />
                         <p id="small">Democrating party</p>
                     </div>
                     <div className="voting-button">

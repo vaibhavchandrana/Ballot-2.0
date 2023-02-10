@@ -44,19 +44,17 @@
  }
 
  .card-body .detail {
-     padding-top: 5vh;
+     padding-top: 3vh;
      width: 45vw;
      height: 20vh;
      font-size: 1rem;
      text-align: center;
      color: azure;
-     display: flex;
-     flex-direction: column;
  }
 
  .card-body .detail>#big {
      font-size: 2.5rem;
-     font-weight: 600;
+     font-weight: 500;
  }
 
  .card-body .detail>#small {
@@ -318,11 +316,11 @@
      .card-body .detail {
          padding-top: 4vh;
          width: 40vw;
-         line-height: 0.1rem;
+         line-height: 4rem;
          font-size: 2rem;
-         text-align: center;
          color: azure;
          margin-left: 3vw;
+
      }
 
      .card-body .detail>#big {
@@ -330,9 +328,9 @@
          font-weight: 600;
      }
 
-     .card-body  .detail>#small {
+     .card-body .detail>#small {
          font-size: 2rem;
-         font-weight: 600;
+         font-weight: 400;
      }
 
      .voting-button {
