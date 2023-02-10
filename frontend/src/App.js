@@ -1,9 +1,10 @@
 import './App.css';
-import { Registration } from './components/Registration';
+import { Header } from './components/Header';
+
 function App() {
   return (
     <div className="App">
-      <Registration/>
+      <Header/>
     </div>
   );
 }
