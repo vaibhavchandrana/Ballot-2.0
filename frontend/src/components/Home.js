@@ -22,7 +22,7 @@ export const Home = () => {
                 </div>
                 <div className='two_features'>
                     <div className='feature_list'>
-                        <span id="icons" class="material-icons">
+                        <span id="icons" style={{fontSize:'6rem'}} class="material-icons">
                             lock
                         </span>
                         <h1>
@@ -31,7 +31,7 @@ export const Home = () => {
                         <h3>Run online elections for an important event or manage consistent, recurring votes.</h3>
                     </div>
                     <div className='feature_list'>
-                        <span id="icons" class="material-icons">
+                        <span id="icons" style={{fontSize:'6rem'}} class="material-icons">
                             check_circle
                         </span>
                         <h1>
@@ -42,7 +42,7 @@ export const Home = () => {
                 </div>
                 <div className='two_features'>
                     <div className='feature_list'>
-                        <span id="icons" class="material-icons">
+                        <span id="icons" style={{fontSize:'6rem'}} class="material-icons">
                             devices
                         </span>
                         <h1>
@@ -51,7 +51,7 @@ export const Home = () => {
                         <h3>Send eligible voters to a personalized voting website, without having to download an online voting app.</h3>
                     </div>
                     <div className='feature_list'>
-                        <span id="icons" class="material-icons">
+                        <span id="icons" style={{fontSize:'6rem'}} class="material-icons">
                             sentiment_very_satisfied
                         </span>
                         <h1>
@@ -62,7 +62,7 @@ export const Home = () => {
                 </div>
                 <div className='two_features'>
                     <div className='feature_list'>
-                        <span id="icons" class="material-icons">
+                        <span id="icons" style={{fontSize:'6rem'}} class="material-icons">
                             photo_camera
                         </span>
                         <h1>
