@@ -4,6 +4,7 @@ html{
 }
 body{
     background-color: #3A9BDC;
+    width: 100vw;
 }
 /* this is css for main card  */
 
@@ -87,7 +88,7 @@ line-height: 100%;
     margin-left: 49%;
     z-index: -3;
 }
-form{
+.form{
     letter-spacing: 2px;
     font-size: 2rem;
     font-weight: 600;
@@ -111,7 +112,7 @@ form{
         font-size: 35%;
     }
 }
-@media(max-width:500px){
+@media(max-width:400px){
     html{
         font-size: 40%;
     }
@@ -119,7 +120,7 @@ form{
         margin-top: 10vh;
         border: 1px solid white;
         border-radius: 15px;
-        width: 60vw;
+        width: 80vw;
         height: auto;
         background: rgba(255, 255 ,255, 0.05);
         backdrop-filter: blur(10px);
@@ -129,6 +130,40 @@ form{
         box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
         color: black;
         z-index: 1;
+    }
+    .ring1{
+
+        border: 50px solid rgb(255, 131, 42);
+        width: 150px;
+        height: 150px;
+        border-radius: 50%;
+        position: absolute;
+        margin-left: 34%;
+        margin-top: -60px;
+        backdrop-filter: blur(100px);
+        z-index: -3;
+    }
+    .ring2{
+       
+        width: 150px;
+        height:150px;
+        
+    }
+    .profile-card>center>.img1{
+        width: 8vw;
+        height: 5vh;
+        margin-top: 5%;
+    }
+    #img2{
+        margin-top: 5%;
+        width: 40vw;
+        
+    }
+    
+    #img3{
+        width: 60%;
+        height: 50px;
+        background-color: rgba(255, 255 ,255, 0.9);
     }
     
 }
