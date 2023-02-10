@@ -16,7 +16,7 @@ export const Profile = () => {
         <br />
         <center><img src={bar} alt="" id="img3" /></center>
         <form>
-          <center> Voter id : 151232 </center>
+          <center><div className='form'> Voter id : 151232 </div></center>
         </form>
         <div className="pf_detail">
           <div className='form'>
