@@ -1,8 +1,30 @@
-.home_container{
+.body{
     display: flex;
-    
+    background-color: #80ccff;
+}
+.home_container{
+    margin-top: 10vh;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content:end;
+}
+.content_container{
+    height: 50vh;
+    width: 45vw;
+    border: solid red 2px;
+}
+.content_container span{
+    font-size:3rem;
+    color:white;
+    font-weight:bolder;
 }
 
 .image-div{
-
+    height: 50vh;
+    width: 45vw;
+}
+.image-div img{
+    height: 100%;
+    width: 100%;
 }
