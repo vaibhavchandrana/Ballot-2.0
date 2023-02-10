@@ -1,4 +1,5 @@
 import React from 'react'
+import { Link } from 'react-router-dom'
 import '../css/signin.css'
 
 
@@ -51,7 +52,7 @@ export const Registration = () => {
     <div className="signup1">
       <i style={{color: 'white'}}> Registered Already </i>
       {/*------------------link to login page  ------------------------------------*/}
-      <a href="/"><button className="btn">Sign in</button></a>
+     <Link to='/login'> <a href="/"><button className="btn">Sign in</button></a></Link>
     </div>
   </div>
   </div>

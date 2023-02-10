@@ -1,10 +1,5 @@
-/* this is css for result page */
 
-/* this is css for graph in result page */
-html{
 
-  font-size: 62.5%;
-}
 .graph{
   margin:auto;
     display: flex;
@@ -25,14 +20,11 @@ html{
   height: 30vh;
   flex : 1 1 30vh;
 }
-@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@600;700&display=swap');
 
-/* this is css for vote card inside result page */
-
-* {
-  box-sizing: border-box;
+.result_body{
+  background-color: white;
+  height: 100vh;
 }
-
 .parent {
   margin:auto;
   display: flex;
@@ -64,9 +56,9 @@ html{
   background: orange;
 }
   
-  h3{
+  .h3{
     color:white;
-    font-size: 4rem;
+    font-size: 3rem;
     font-weight: 600;
     line-height: 1;
     padding-bottom: .5em;
@@ -75,10 +67,10 @@ html{
     transition: color .45s ease, border .45s ease;
   }
 
-  h4 {
+  .child h4 {
     color:white;
     text-transform: uppercase;
-    font-size: 2rem;
+    font-size: 1.5rem;
     font-weight: 700;
     line-height: 1;
     letter-spacing: 0.1em;
@@ -86,9 +78,9 @@ html{
     transition: color .45s ease;
   }
 
-  p {
+ .child p {
     color: #FFFFFF;
-    font-size: 2rem;
+    font-size: 1rem;
     font-weight: 600;
     line-height: 1.8;
     margin: 0 0 1.25em;
@@ -142,5 +134,35 @@ html{
     background: #1b1b1b;
     transform: scale(1.02);
   }
-  
+  .h3{
+    color:white;
+    font-size: 6rem;
+    font-weight: 600;
+    line-height: 1;
+    padding-bottom: .5em;
+    margin: 0 0 0.132857143em;
+    border-bottom: 2px solid #753BBD;
+    transition: color .45s ease, border .45s ease;
+  }
+
+  .child h4 {
+    color:white;
+    text-transform: uppercase;
+    font-size: 4rem;
+    font-weight: 700;
+    line-height: 1;
+    letter-spacing: 0.1em;
+    margin: 0 0 1.777777778em;
+    transition: color .45s ease;
+  }
+
+ .child p {
+    color: #FFFFFF;
+    font-size: 3rem;
+    font-weight: 600;
+    line-height: 1.8;
+    margin: 0 0 1.25em;
+    transform: translateY(-1em);
+    transition: opacity .45s ease, transform .5s ease;
+  }
 }

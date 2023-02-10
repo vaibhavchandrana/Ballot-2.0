@@ -1,10 +1,9 @@
 import React from 'react'
 import '../css/home.css'
-// import img from '../images/voting_image2.jpg'
 
 export const Home = () => {
     return (
-        <div className='body'>
+        <div className='home_body'>
             <div className='home_container'>
 
                 <div className='image-div'>
@@ -15,6 +14,7 @@ export const Home = () => {
                         <br />
                         Your Vote</span>
                     <p>Upgrade from manually counting ballots to an online election system without sacrificing the integrity of your vote</p>
+                    <button className ="start_btn">Get Started</button>
                 </div>
             </div>
             <div className='feature_div'>
@@ -23,7 +23,7 @@ export const Home = () => {
                 </div>
                 <div className='two_features'>
                     <div className='feature_list'>
-                        <span class="material-icons">
+                        <span id="icons" class="material-icons">
                             lock
                         </span>
                         <h1>
@@ -32,7 +32,7 @@ export const Home = () => {
                         <h3>Run online elections for an important event or manage consistent, recurring votes.</h3>
                     </div>
                     <div className='feature_list'>
-                        <span class="material-icons">
+                        <span id="icons" class="material-icons">
                             check_circle
                         </span>
                         <h1>
@@ -43,7 +43,7 @@ export const Home = () => {
                 </div>
                 <div className='two_features'>
                     <div className='feature_list'>
-                        <span class="material-icons">
+                        <span id="icons" class="material-icons">
                             devices
                         </span>
                         <h1>
@@ -52,7 +52,7 @@ export const Home = () => {
                         <h3>Send eligible voters to a personalized voting website, without having to download an online voting app.</h3>
                     </div>
                     <div className='feature_list'>
-                        <span class="material-icons">
+                        <span id="icons" class="material-icons">
                             sentiment_very_satisfied
                         </span>
                         <h1>
@@ -63,7 +63,7 @@ export const Home = () => {
                 </div>
                 <div className='two_features'>
                     <div className='feature_list'>
-                        <span class="material-icons">
+                        <span id="icons" class="material-icons">
                             photo_camera
                         </span>
                         <h1>

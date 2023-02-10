@@ -1,12 +1,3 @@
-/* this is css for profile page */
-html{
-    font-size: 62.5%;
-}
-body{
-    background-color: #3A9BDC;
-    width: 100vw;
-}
-/* this is css for main card  */
 
 .profile-card{
     margin-top: 10vh;
@@ -19,7 +10,7 @@ body{
     margin-left: auto;
     margin-right: auto;
     position: relative;
-    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
+    box-shadow: 0 15px 35px rgba(104, 100, 100, 0.5);
     color: black;
     z-index: 1;
 }
@@ -27,8 +18,9 @@ body{
 
 .profile-card>center>.img1{
     width: 8vw;
-    height: 8vh;
+    height: 5vh;
     margin-top: 5%;
+    margin-bottom: 5%;
 }
 /* this is css p inside card */
 
@@ -36,8 +28,8 @@ body{
 text-align: center;
 color: black;
 font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-font-size: 2rem;
-line-height: 100%;
+font-size: 1.2rem;
+line-height: 40%;
 }
 /* this is css for profile photo */
 
@@ -90,11 +82,11 @@ line-height: 100%;
 }
 .form{
     letter-spacing: 2px;
-    font-size: 2rem;
+    font-size: 1rem;
     font-weight: 600;
     color: black;
 }
-.detail{
+.pf_detail{
     margin-left: 0%;
 }
 @media(max-width:998px){

@@ -10,7 +10,7 @@ export const Voting = () => {
         console.log(voterId);
     }
     return (
-        <div>
+        <div className='voting_body'>
             <div className="card">
                 <div className="card-body">
                     <div className="profile">

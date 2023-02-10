@@ -4,7 +4,7 @@ import bar from "../images/bar.png"
 import bharat from "../images/bharat.png"
 export const Profile = () => {
   return (
-    <div className='body'>
+    <div className='profile_body'>
       <div className="ring1" />
       {/*------------------card for profile start here------------------------------------*/}
       <div className="profile-card">
@@ -18,7 +18,7 @@ export const Profile = () => {
         <form>
           <center> Voter id : 151232 </center>
         </form>
-        <div className="detail">
+        <div className="pf_detail">
           <div className='form'>
             <br />
             Name : Vaibhav Rana <br /><br />

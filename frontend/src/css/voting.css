@@ -1,20 +1,10 @@
- /* this is css for voting  page */
- * {
-     margin: 0px;
-     padding: 0px;
- }
 
- html {
-     font-size: 62.5%;
- }
-
- body {
+ .voting_body {
      margin: 0px;
      padding: 0px;
      height: 100vh;
      width: 100vw;
      background-size: cover;
-     background-color: #3A9BDC;
  }
 
  /* this is css for candidate card in voting  page */
@@ -30,7 +20,11 @@
      box-shadow: 5px 5px 25px rgba(68, 68, 68, 1);
 
  }
-
+ .card-body {
+    height: 100%;
+    width: 100%;
+    display: flex;
+}
  .card p {
      color: white;
  }
@@ -49,30 +43,28 @@
      height: 100%;
  }
 
- .detail {
+ .card-body .detail {
      padding-top: 5vh;
      width: 45vw;
-     line-height: 3rem;
-     font-size: 4rem;
+     height: 20vh;
+     font-size: 1rem;
      text-align: center;
      color: azure;
+     display: flex;
+     flex-direction: column;
  }
 
- .detail>#big {
-     font-size: 4rem;
-     font-weight: 600;
- }
-
- .detail>#small {
+ .card-body .detail>#big {
      font-size: 2.5rem;
      font-weight: 600;
  }
 
- .card-body {
-     height: 100%;
-     width: 100%;
-     display: flex;
+ .card-body .detail>#small {
+     font-size: 1.5rem;
+     font-weight: 600;
  }
+
+ 
 
  /* this is css for voting  page */
 
@@ -83,14 +75,14 @@
      width: 30vw;
  }
 
- button {
+ .voting-button button {
      cursor: pointer;
      padding: 1%;
      color: #2196f3;
      text-transform: uppercase;
      letter-spacing: 3px;
      text-decoration: wavy;
-     font-size: 3rem;
+     font-size: 1.5rem;
      overflow: hidden;
      transition: 0.2s;
      border-radius: 20px;
@@ -99,7 +91,7 @@
      border-color: aliceblue;
  }
 
- button:hover {
+ .voting-button button:hover {
      color: white;
      background: #2196f3;
      box-shadow: 0 0 10px #2196f3, 0 0 40px #2196f3,
@@ -116,12 +108,12 @@
      text-transform: uppercase;
      letter-spacing: 3px;
      text-decoration: wavy;
-     font-size: 3.5rem;
+     font-size: 1.5rem;
      overflow: hidden;
      transition: 0.2s;
      border-radius: 20px;
-     width: 25vw;
-     height: 15vh;
+     width: 20vw;
+     height: 10vh;
      border-color: aliceblue;
      margin: 5%;
  }
@@ -134,12 +126,12 @@
      text-transform: uppercase;
      letter-spacing: 3px;
      text-decoration: wavy;
-     font-size: 3.5rem;
+     font-size: 1.5rem;
      overflow: hidden;
      transition: 0.2s;
      border-radius: 20px;
-     width: 25vw;
-     height: 15vh;
+     width: 20vw;
+     height: 10vh;
      border-color: aliceblue;
      margin: 5%;
  }
@@ -301,17 +293,19 @@
      html {
          font-size: 35%;
      }
+
      .card {
-        margin-left: 5%;
-        margin-top: 4%;
-        height: 15vh;
-        width: 85vw;
-        background-color: #E63B60;
-        backdrop-filter: blur(1 px);
-        border-radius: 10px;
-        box-shadow: 5px 5px 25px rgba(68, 68, 68, 1);
-   
-    }
+         margin-left: 5%;
+         margin-top: 4%;
+         height: 15vh;
+         width: 85vw;
+         background-color: #E63B60;
+         backdrop-filter: blur(1 px);
+         border-radius: 10px;
+         box-shadow: 5px 5px 25px rgba(68, 68, 68, 1);
+
+     }
+
      .profile {
          padding: 1%;
          height: 10vh;
@@ -321,34 +315,35 @@
 
      }
 
-     .detail {
+     .card-body .detail {
          padding-top: 4vh;
          width: 40vw;
-         line-height: 3rem;
-         font-size: 4rem;
+         line-height: 0.1rem;
+         font-size: 2rem;
          text-align: center;
          color: azure;
          margin-left: 3vw;
      }
 
-     .detail>#big {
+     .card-body .detail>#big {
          font-size: 2.5rem;
          font-weight: 600;
      }
 
-     .detail>#small {
+     .card-body  .detail>#small {
          font-size: 2rem;
          font-weight: 600;
      }
+
      .voting-button {
-        padding-top: 4%;
-        padding-bottom: 4%;
-        margin-right: 2%;
-        margin-left: 0;
-        width: 20vw;
-    }
-   
-     button {
+         padding-top: 4%;
+         padding-bottom: 4%;
+         margin-right: 2%;
+         margin-left: 0;
+         width: 20vw;
+     }
+
+     .voting-button button {
          cursor: pointer;
          padding: 1%;
          color: #2196f3;
@@ -366,22 +361,22 @@
      }
 
      #subbtn {
-        
+
          font-size: 3rem;
          font-weight: 700;
          width: 35vw;
          height: 8vh;
-     
+
      }
 
      #subbtn:hover {
-         
+
          font-size: 3rem;
          font-weight: 700;
          border-radius: 20px;
          width: 35vw;
          height: 8vh;
-         
+
      }
 
  }
