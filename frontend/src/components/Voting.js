@@ -11,8 +11,8 @@ export const Voting = () => {
     }
     return (
         <div className='voting_body'>
-            <div className="card">
-                <div className="card-body">
+            <div className="custom-card">
+                <div className="custom-card-body">
                     <div className="profile">
                         <img src={profile} alt="profile " />
                     </div>

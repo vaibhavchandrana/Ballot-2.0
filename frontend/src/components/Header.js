@@ -1,6 +1,6 @@
-import React from 'react'
-import '../css/voting_navbar.css'
-import { Link } from 'react-router-dom';
+import React from "react";
+import "../css/voting_navbar.css";
+import { Link } from "react-router-dom";
 export const Header = () => {
   return (
     <div>
@@ -11,14 +11,50 @@ export const Header = () => {
           <i className="fas fa-bars" />
         </label>
         <ul>
-          <li><a href="/"> <Link to='login'>Login</Link></a></li>
-          <li><a  href="/"><Link to='/'>Home</Link></a></li>
-          <li><a href="/"><Link to='profile'>Profile </Link ></a></li>
-          <li><a href="/"><Link to='voting'>Voting Area</Link></a></li>
-          <li><a href="/"><Link to='Result'>Result</Link></a></li>
-          <li><a href="/"><Link to='login'>Logout </Link></a></li>
-        </ul >
-      </nav >
-    </div >
-  )
-}
+          <li>
+            <a href="/">
+              {" "}
+              <Link to="login">Login</Link>
+            </a>
+          </li>
+          <li>
+            <a href="/">
+              {" "}
+              <Link to="admin_login">Admin</Link>
+            </a>
+          </li>
+          <li>
+            <a href="/">
+              <Link to="/">Home</Link>
+            </a>
+          </li>
+          <li>
+            <a href="/">
+              <Link to="profile">Profile </Link>
+            </a>
+          </li>
+          <li>
+            <a href="/">
+              <Link to="voting">Voting Area</Link>
+            </a>
+          </li>
+          <li>
+            <a href="/">
+              <Link to="Result">Result</Link>
+            </a>
+          </li>
+          <li>
+            <a href="/">
+              <Link to="login">Logout </Link>
+            </a>
+          </li>
+          <li>
+            <a href="/">
+              <Link to="election_list">ElectionList </Link>
+            </a>
+          </li>
+        </ul>
+      </nav>
+    </div>
+  );
+};
