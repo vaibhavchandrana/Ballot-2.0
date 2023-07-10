@@ -1,0 +1,19 @@
+.election-form-div{
+    padding: 50px;
+}
+.election-form-group{
+    margin-top: 15px;
+    margin-bottom: 15px;
+    font-size:22px;
+}
+.add-new-election-item{
+    margin-left:auto;
+}
+.election-list-item-card{
+    color: black;
+}
+.election-list-main-div{
+    margin-top: 20px;
+    margin-left:30px;
+    margin-right:30px;
+}
