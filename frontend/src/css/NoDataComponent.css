@@ -1,0 +1,22 @@
+.no-data-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: auto;
+  width: 100%;
+  text-align: center;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+.no-data-image {
+  width: 30%; /* Responsive image */
+  height: 50vh;
+  margin-bottom: 20px;
+}
+
+.no-data-text {
+  font-size: 1.5em;
+  color: black;
+}

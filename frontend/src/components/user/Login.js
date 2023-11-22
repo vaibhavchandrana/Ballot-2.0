@@ -1,11 +1,12 @@
 import React, { useState } from "react";
-import "../css/signin.css";
+import "../../css/signin.css";
 import { Link } from "react-router-dom";
-import { backendUrl } from "../backendUrl";
+import { backendUrl } from "../../backendUrl";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 export const Login = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [email, setEmail] = useState("vaibhav@ballot.com");
+  const [password, setPassword] = useState("test@123");
   const [errorMessage, setErrorMessage] = useState("");
   const url = backendUrl();
   const navigate = useNavigate();
@@ -36,8 +37,9 @@ export const Login = () => {
 
       if (response.ok) {
         // Login successful, perform any necessary actions (e.g., redirect)
-        console.log("Login successful");
-        localStorage.setItem("profile", email);
+        toast.success("Login successful");
+        localStorage.setItem("ballot_profile", email);
+        localStorage.setItem("ballot_login_as", "user");
         navigate("/");
       } else {
         // Login failed, handle the error
@@ -58,7 +60,6 @@ export const Login = () => {
 
           <form className="form" onSubmit={handleLogin}>
             <div className="user-details">
-              {/* <h2 style={{color:"red"}}>error1</h2> */}
               <div className="input-box">
                 <span className="details">Username</span>
                 <input
@@ -92,7 +93,7 @@ export const Login = () => {
           {/* <!---------------------------- form ends here--------------------------------------------> */}
 
           <div className="signup1">
-            <i style={{ color: "white" }}> Visting for the first time?</i>
+            <i style={{ color: "black" }}> Visting for the first time?</i>
             <Link to="/signup">
               <a href="/">
                 <button className="btn">Sign up</button>

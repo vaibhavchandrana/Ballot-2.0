@@ -1,16 +1,17 @@
 import React, { useEffect, useState } from "react";
-import "../css/profile.css";
-import bar from "../images/bar.png";
-import bharat from "../images/bharat.png";
-import { backendUrl } from "../backendUrl";
+import "../../css/profile.css";
+import bar from "../../images/bar.png";
+import bharat from "../../images/bharat.png";
+import { backendUrl, imageUrl } from "../../backendUrl";
 import { useNavigate } from "react-router-dom";
 export const Profile = () => {
   const url = backendUrl();
   const navigate = useNavigate();
   const [profileData, setProfileData] = useState([]);
+  const image = imageUrl();
   useEffect(() => {
     async function getProfileData() {
-      const email = localStorage.getItem("profile");
+      const email = localStorage.getItem("ballot_profile");
       if (email) {
         try {
           // Make the API call to send the login data to the server
@@ -61,13 +62,13 @@ export const Profile = () => {
         </center>
         <br />
         <center>
-          <img src={bar} alt="" id="img3" />
+          <img
+            src={`${image}${profileData.photo}`}
+            alt=""
+            style={{ width: "100%", padding: "10%" }}
+          />
         </center>
-        <form>
-          <center>
-            <div className="form"> Voter id : 151232 </div>
-          </center>
-        </form>
+
         <div className="pf_detail">
           <div className="form">
             <br />

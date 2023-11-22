@@ -1,9 +1,55 @@
+from .models import Vote
 from rest_framework import serializers
 from django.contrib.auth.hashers import make_password
-from .models import Voter
+from .models import Voter, Election
 from django.core.files import File
 from django.contrib.auth import authenticate
 from django.contrib.auth.hashers import check_password
+from .models import Candidate
+from .models import Admin
+
+
+# class AdminSerializer(serializers.ModelSerializer):
+#     class Meta:
+#         model = Admin
+#         fields = ['id', 'full_name', 'email', 'phone_number', 'password']
+
+
+class AdminSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Admin
+        fields = ['id', 'full_name', 'email', 'phone_number', 'password']
+        extra_kwargs = {
+            'password': {'write_only': True}
+        }
+
+    def create(self, validated_data):
+        validated_data['password'] = make_password(validated_data['password'])
+        return super().create(validated_data)
+
+
+class CandidateSerializer(serializers.ModelSerializer):
+    no_of_votes = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Candidate
+        fields = ['id', 'name', 'subinformation',
+                  'photo', 'election', 'no_of_votes']
+
+    def get_no_of_votes(self, obj):
+        # Calculate the number of votes for the candidate
+        return Vote.objects.filter(candidate=obj).count()
+
+    def create(self, validated_data):
+        # Handle file upload during object creation
+        return Candidate.objects.create(**validated_data)
+
+    def update(self, instance, validated_data):
+        # Handle file upload during object update
+        instance.photo = validated_data.get('photo', instance.photo)
+        # Update other fields as necessary
+        return super().update(instance, validated_data)
+
 
 class UserRegistrationSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True)
@@ -64,3 +110,72 @@ class UserLoginSerializer(serializers.Serializer):
         attrs['user'] = user
         return attrs
 
+
+class ElectionSerializer(serializers.ModelSerializer):
+    created_by_admin = AdminSerializer(source='created_by', read_only=True)
+    candidates_count = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Election
+        fields = ['id', 'election_name', 'generation_date',
+                  'expiry_date', 'created_by_admin', 'access_type',
+                  'status', 'candidates_count']
+
+    def get_candidates_count(self, obj):
+        return obj.candidates.count()
+
+    def validate(self, data):
+        election_name = data.get('election_name')
+        password = data.get('password')
+        generation_date = data.get('generation_date')
+        expiry_date = data.get('expiry_date')
+
+        # Check if election name and password are the same
+        if election_name == password:
+            raise serializers.ValidationError(
+                "Election name and password cannot be the same.")
+
+        # Check if expiry date is greater than generation date
+        if generation_date and expiry_date and generation_date >= expiry_date:
+            raise serializers.ValidationError(
+                "Expiry date must be greater than the generation date.")
+
+        return data
+
+
+class ElectionSerializerAdmin(serializers.ModelSerializer):
+    class Meta:
+        model = Election
+        fields = '__all__'
+
+    def validate(self, data):
+        election_name = data.get('election_name')
+        password = data.get('password')
+        generation_date = data.get('generation_date')
+        expiry_date = data.get('expiry_date')
+
+        # Check if election name and password are the same
+        if election_name == password:
+            raise serializers.ValidationError(
+                "Election name and password cannot be the same.")
+
+        # Check if expiry date is greater than generation date
+        if generation_date and expiry_date and generation_date >= expiry_date:
+            raise serializers.ValidationError(
+                "Expiry date must be greater than the generation date.")
+
+        return data
+
+
+class VoteSerializer(serializers.ModelSerializer):
+    # Define your fields here, if there are any additional fields
+
+    class Meta:
+        model = Vote
+        # Update this with the actual fields of your Vote model
+        fields = ['candidate', 'election', 'time_cast']
+
+    def create(self, validated_data):
+        # Handle the creation of a Vote instance
+        # Adjust the following line according to your model's fields and logic
+        return Vote.objects.create(**validated_data)

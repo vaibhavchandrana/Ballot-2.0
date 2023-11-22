@@ -1,7 +1,9 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import "../css/signin.css";
-import { backendUrl } from "../backendUrl";
+import CameraCapture from "./CameraCapture";
+import "../../css/signin.css";
+import { backendUrl } from "../../backendUrl";
+
 export const Registration = () => {
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
@@ -12,6 +14,7 @@ export const Registration = () => {
   const [image, setImage] = useState(null);
   const [errorMessage, setErrorMessage] = useState("");
   const url = backendUrl();
+
   const handleRegistration = async (e) => {
     e.preventDefault();
 
@@ -32,25 +35,20 @@ export const Registration = () => {
       return;
     }
 
-    // Create the payload
-    const payload = {
-      full_name: fullName,
-      email: email,
-      age: age,
-      phone_number: phone,
-      password: password,
-      photo: image,
-    };
-
     try {
-      // Create a FormData object and append the image file to it
+      if (!image) {
+        setErrorMessage("Please capture your image ");
+        return;
+      }
       const formData = new FormData();
-      formData.append("image", image);
 
       // Append other form fields to the FormData object
-      Object.keys(payload).forEach((key) => {
-        formData.append(key, payload[key]);
-      });
+      formData.append("full_name", fullName);
+      formData.append("email", email);
+      formData.append("age", age);
+      formData.append("phone_number", phone);
+      formData.append("password", password);
+      formData.append("image", image);
 
       // Make the API call to send the data to the server
       const response = await fetch(`${url}/register/`, {
@@ -70,11 +68,10 @@ export const Registration = () => {
     }
   };
 
-  const handleImageUpload = (e) => {
-    const file = e.target.files[0];
+  const handleImageUpload = (file) => {
     setImage(file);
+    setErrorMessage("");
   };
-
   return (
     <div className="body">
       <div className="container extra">
@@ -169,17 +166,7 @@ export const Registration = () => {
                 <br />
                 <span id="error4" className="error" />
               </div>
-              <div className="input-box">
-                <span className="details">Image</span>
-                <input
-                  type="file"
-                  id="image"
-                  name="image"
-                  accept="image/*"
-                  onChange={handleImageUpload}
-                  required
-                />
-              </div>
+              <CameraCapture setImage={handleImageUpload} />
             </div>
             <span id="error5" className="error">
               {errorMessage}

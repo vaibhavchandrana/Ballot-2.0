@@ -1,0 +1,48 @@
+.election-details-container {
+  padding: 20px;
+}
+
+.election-card {
+  background-color: white;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  margin: 10px;
+  padding: 20px;
+  box-sizing: border-box;
+  color: white;
+  background-image: url("https://static.vecteezy.com/system/resources/previews/002/011/893/non_2x/paper-cut-luxury-gold-background-with-metal-texture-3d-abstract-for-gift-card-poster-on-wall-poster-template-landing-page-ui-ux-cover-book-banner-free-vector.jpg");
+}
+
+.card-title {
+  font-size: 1.5em;
+  margin-bottom: 15px;
+}
+
+.card-text p {
+  margin-bottom: 10px;
+  line-height: 1.4;
+}
+
+.info-row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+/* Ensure each p tag takes half the width */
+.info-row p {
+  flex: 1;
+  margin-right: 10px; /* Spacing between the p tags */
+}
+
+/* Responsive Design for smaller screens */
+
+.add-candidate-form-div {
+  background-color: white;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  margin: 10px;
+  padding: 20px;
+}

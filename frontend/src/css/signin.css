@@ -1,11 +1,11 @@
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700&display=swap");
 /* this is css for signin  page */
 
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  font-family: 'Poppins', sans-serif;
+  font-family: "Poppins", sans-serif;
 }
 
 .body {
@@ -14,7 +14,7 @@
   justify-content: center;
   align-items: center;
   padding: 10px;
-  background-color: #3A9BDC;
+  background-color: #3a9bdc;
   background-size: cover;
   background-repeat: no-repeat;
   /* background: linear-gradient(0deg, rgba(2, 126,251,1) 0%, rgba(0,3,255,1)100%); */
@@ -22,13 +22,12 @@
 
 .container {
   width: 50%;
-  background-image: url(../images/contain.jpg);
-  background-repeat: no-repeat;
+  background-color: #fff;
+
   background-size: cover;
   padding: 25px 30px;
   border-radius: 5px;
-  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.50);
-
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.5);
 }
 
 .container .title {
@@ -36,7 +35,6 @@
   font-weight: 600;
   color: #1b1b1b;
 }
-
 
 .signup1 {
   color: #1b1b1b;
@@ -59,7 +57,7 @@
 }
 
 .signup1 .btn:hover {
-  background: linear-gradient(-135deg, #3A9BDC, #1b1b1b);
+  background: linear-gradient(-135deg, #3a9bdc, #1b1b1b);
 }
 
 /* this is css for form  */
@@ -122,12 +120,12 @@
 
 .form .button input:hover {
   /* transform: scale(0.99); */
-  background: linear-gradient(-135deg, #3A9BDC, #1b1b1b);
+  background: linear-gradient(-135deg, #3a9bdc, #1b1b1b);
 }
 
 /* this is css for responsiveness  page */
 
-@media(max-width: 584px) {
+@media (max-width: 584px) {
   .container {
     width: 80%;
     height: 80vh;
@@ -146,7 +144,6 @@
   .form .user-details .input-box {
     margin-bottom: 10px;
     width: 100%;
-
   }
 
   .form .category {
@@ -179,18 +176,15 @@
     border: none;
     color: #fff;
     font-size: 15px;
-
   }
 
   .form .button {
     height: 30px;
     margin: 25px 0;
   }
-
-
 }
 
-@media(max-width: 459px) {
+@media (max-width: 459px) {
   .container .content .category {
     flex-direction: column;
   }
@@ -204,7 +198,6 @@
   .signup1 {
     display: flex;
     flex-direction: row;
-
   }
 
   .signup1 i {
@@ -219,7 +212,6 @@
     border: none;
     color: #fff;
     font-size: 15px;
-
   }
 }
 

@@ -1,0 +1,67 @@
+.candidate-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: #f06292; /* Example color */
+  padding: 10px;
+  border-radius: 10px;
+  color: white;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  margin: 10px;
+}
+
+.candidate-image img {
+  border-radius: 50%;
+  width: 60px; /* adjust as needed */
+  height: 60px; /* adjust as needed */
+}
+
+.candidate-info h2,
+.candidate-info p {
+  margin: 0;
+  padding-left: 10px; /* adjust as needed */
+}
+
+.vote-button-v2 button {
+  background-color: #fff;
+  border: none;
+  border-radius: 20px;
+  padding: 10px 20px;
+  cursor: pointer;
+  outline: none;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  transition: background-color 0.3s;
+  margin: 0px 3px 0 3px;
+}
+
+.vote-button-v2 button:hover {
+  background-color: #ddd;
+}
+.vote-button-parent {
+  display: flex;
+  justify-content: space-evenly;
+}
+/* Responsive Design */
+@media (max-width: 768px) {
+  .vote-button-v2 button {
+    background-color: #fff;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    outline: none;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    transition: background-color 0.3s;
+    display: flex;
+    justify-content: center;
+    letter-spacing: 0;
+    padding: 4px 0 2px 0;
+    font-size: 10px;
+    height: 20px;
+  }
+  .vote-button-parent {
+    margin-top: 10px;
+  }
+  .info-row p {
+    font-size: 8px;
+  }
+}
