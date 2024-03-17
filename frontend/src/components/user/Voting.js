@@ -8,14 +8,27 @@ import { backendUrl } from "../../backendUrl";
 import { imageUrl } from "../../backendUrl";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
+import CameraCapture from "./CameraCapture";
+
 export const Voting = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const image = imageUrl();
   const [voterId, setVoterId] = useState(0);
+  const [imageFile, setImage] = useState(null);
+  const [autoCaptureFlag, setAutoCaptureFlag] = useState(false);
+  const [loading, setLoading] = useState(false);
   const updateVoterId = (id) => {
     setVoterId(id);
+    setAutoCaptureFlag(false);
   };
+  const handleImageUpload = (file) => {
+    setImage(file);
+    if (file) {
+      addVote(file);
+    }
+  };
+
   useEffect(() => {
     if (localStorage.getItem("ballot_login_as") != "user") {
       navigate("/login");
@@ -31,14 +44,16 @@ export const Voting = () => {
       console.error("Error sending data:", error);
     }
   }
-  async function addVote() {
+  async function addVote(imageFile) {
     try {
+      setLoading(true);
       const response = await axios.post(`${url}/add_vote/election`, {
         voter_email_id: localStorage.getItem("ballot_profile"),
         candidate: voterId,
         election: Number(id),
+        image_uri: imageFile,
       });
-
+      setLoading(false);
       // Handle success
       toast.success("Vote added successfully!");
     } catch (error) {
@@ -93,10 +108,14 @@ export const Voting = () => {
           </div>
         </div>
       ))}
-
+      {autoCaptureFlag && <CameraCapture setImage={handleImageUpload} />}
       <center>
-        <button type="submit" id="subbtn" onClick={addVote}>
-          Confirm
+        <button
+          type="submit"
+          id="subbtn"
+          onClick={() => setAutoCaptureFlag(true)}
+        >
+          {loading ? "Adding..." : "Confirm"}
         </button>
       </center>
     </div>

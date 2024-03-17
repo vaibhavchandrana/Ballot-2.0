@@ -16,6 +16,7 @@ const initialState = {
 const ElectionForm = () => {
   const url = backendUrl();
   const navigate = useNavigate();
+  console.log(localStorage.getItem("ballot_admin_id"));
   const sendFormDataToBackend = async () => {
     try {
       const electionData = {
@@ -23,7 +24,7 @@ const ElectionForm = () => {
         generation_date: formData.fromDate,
         expiry_date: formData.toDate,
         candidates: null,
-        created_by: Number(localStorage.getItem("ballot_admin_id")),
+        created_by: JSON.parse(localStorage.getItem("ballot_admin_id")),
         access_type: formData.accessType == 0 ? "VIA_URL" : "OPEN_FOR_ALL",
         password: formData.electionPass,
       };
@@ -32,7 +33,7 @@ const ElectionForm = () => {
         `${url}/create/election/`,
         electionData
       );
-      navigate(`/election/${response.data.id}`);
+      navigate(`/admin/election/details/${response.data.id}`);
       localStorage.setItem("ballot_newElectionID", response.data.id);
       if (response.status == 201) {
         toast.success("Election Added Sucessfully");

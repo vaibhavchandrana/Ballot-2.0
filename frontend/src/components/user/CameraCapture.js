@@ -1,25 +1,12 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import Webcam from "react-webcam";
 import { Modal, Button } from "react-bootstrap";
 
 function CameraCapture(propTypes) {
-  const [showModal, setShowModal] = useState(false);
+  const [showModal, setShowModal] = useState(true);
   const [capturedImage, setCapturedImage] = useState(null);
+  const [timer, setTimer] = useState(10); // Initial timer value in seconds
   const webcamRef = useRef(null);
-  function dataURItoBlob(dataURI) {
-    const byteString = atob(dataURI.split(",")[1]);
-    const mimeString = dataURI.split(",")[0].split(":")[1].split(";")[0];
-    const ab = new ArrayBuffer(byteString.length);
-    const ia = new Uint8Array(ab);
-    for (let i = 0; i < byteString.length; i++) {
-      ia[i] = byteString.charCodeAt(i);
-    }
-    return new Blob([ab], { type: mimeString });
-  }
-
-  const openModal = () => {
-    setShowModal(true);
-  };
 
   const closeModal = () => {
     setShowModal(false);
@@ -34,30 +21,34 @@ function CameraCapture(propTypes) {
     }
   };
 
-  const handleRetake = () => {
-    setCapturedImage(null); // Clear the captured image
-    closeModal();
-  };
+  useEffect(() => {
+    let interval;
+    if (timer > 0 && showModal) {
+      interval = setInterval(() => {
+        setTimer((prevTimer) => prevTimer - 1);
+      }, 1000);
+    } else if (timer === 0 && showModal) {
+      capture();
+      clearInterval(interval);
+      closeModal();
+    }
+    return () => clearInterval(interval);
+  }, [timer, showModal, propTypes]);
 
-  const handleUpload = () => {
-    // Send the captured image to your API here
-    // You can use the 'capturedImage' state to get the image data
-    // Example: fetch('your-api-endpoint', { method: 'POST', body: capturedImage });
-  };
+  useEffect(() => {
+    const countdown = setTimeout(() => {
+      if (showModal && timer > 0) {
+        setTimer((prevTimer) => prevTimer - 1);
+      }
+    }, 1000);
+    return () => clearTimeout(countdown);
+  }, [timer, showModal]);
 
   return (
     <div>
-      <Button
-        variant="primary"
-        onClick={openModal}
-        style={{ width: "150px", fontSize: "15px" }}
-      >
-        Capture Photo
-      </Button>
-
       <Modal show={showModal} onHide={closeModal} centered>
         <Modal.Header closeButton>
-          <Modal.Title>Captured Photo</Modal.Title>
+          <Modal.Title>Capture Photo in {timer} seconds</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           {capturedImage ? (
@@ -73,25 +64,16 @@ function CameraCapture(propTypes) {
           )}
         </Modal.Body>
         <Modal.Footer>
-          {capturedImage ? (
-            <>
-              <Button variant="secondary" onClick={handleRetake}>
-                Retake
-              </Button>
-              <Button variant="primary" onClick={handleUpload}>
-                Upload
-              </Button>
-            </>
-          ) : (
-            <>
-              <Button variant="secondary" onClick={closeModal}>
-                Cancel
-              </Button>
-              <Button variant="primary" onClick={capture}>
+          <>
+            <Button variant="secondary" onClick={closeModal}>
+              Cancel
+            </Button>
+            {!capturedImage && (
+              <Button variant="primary" onClick={capture} disabled={timer > 0}>
                 Take Photo
               </Button>
-            </>
-          )}
+            )}
+          </>
         </Modal.Footer>
       </Modal>
     </div>

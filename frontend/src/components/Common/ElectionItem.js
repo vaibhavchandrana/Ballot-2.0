@@ -17,7 +17,7 @@ function ElectionItem({ electionList, usedIn }) {
   }, [electionList]);
   const handleShowModal = (access, id) => {
     if (access === "OPEN_FOR_ALL") {
-      if (isAdmin) navigate(`/admin/election/detais/${id}`);
+      if (isAdmin) navigate(`/admin/election/details/${id}`);
       else navigate(`/election_voting/${id}`);
     } else {
       setModalShow(true);

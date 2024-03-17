@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import CameraCapture from "./CameraCapture";
+import { Form } from "react-bootstrap";
 import "../../css/signin.css";
 import { backendUrl } from "../../backendUrl";
-
 export const Registration = () => {
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
@@ -13,12 +13,11 @@ export const Registration = () => {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [image, setImage] = useState(null);
   const [errorMessage, setErrorMessage] = useState("");
+  const [autoCaptureFlag, setAutoCaptureFlag] = useState(false);
+  const [agreeToShareImage, setAgreeToShareImage] = useState(false);
+
   const url = backendUrl();
-
-  const handleRegistration = async (e) => {
-    e.preventDefault();
-
-    // Perform validation
+  function handleAutoClick() {
     if (
       !fullName ||
       !email ||
@@ -34,7 +33,13 @@ export const Registration = () => {
       setErrorMessage("Passwords do not match.");
       return;
     }
-
+    if (!agreeToShareImage) {
+      setErrorMessage("Please agree to share your image being saved.");
+      return;
+    }
+    setAutoCaptureFlag(true);
+  }
+  const handleRegistration = async (file) => {
     try {
       if (!image) {
         setErrorMessage("Please capture your image ");
@@ -69,7 +74,9 @@ export const Registration = () => {
   };
 
   const handleImageUpload = (file) => {
-    setImage(file);
+    if (file) {
+      handleRegistration(file);
+    }
     setErrorMessage("");
   };
   return (
@@ -166,17 +173,22 @@ export const Registration = () => {
                 <br />
                 <span id="error4" className="error" />
               </div>
-              <CameraCapture setImage={handleImageUpload} />
             </div>
             <span id="error5" className="error">
               {errorMessage}
             </span>
             <div className="button">
-              <input type="submit" value="Register" id="mysubmit" />
+              <input
+                type="button"
+                onClick={handleAutoClick}
+                value="Register"
+                id="mysubmit"
+              />
             </div>
           </form>
           {/*------------------ registration form ends here------------------------------------*/}
         </div>
+        {autoCaptureFlag && <CameraCapture setImage={handleImageUpload} />}
         <div className="signup1">
           <i style={{ color: "white" }}> Registered Already </i>
           {/*------------------link to login page  ------------------------------------*/}
