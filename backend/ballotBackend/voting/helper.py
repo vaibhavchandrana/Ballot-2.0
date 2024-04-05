@@ -46,6 +46,24 @@ def face_matcher(file_obj, photos_directory='media/photos'):
 
     return [{"message": "Faces detected"}, False]
 
+
+def face_matches(input_image, saved_image):
+    img = face_recognition.load_image_file(input_image)
+    # Detect faces in the uploaded image
+    uploaded_face_encodings = face_recognition.face_encodings(img)
+
+    if not uploaded_face_encodings:
+        return False
+    current_img = face_recognition.load_image_file(saved_image)
+    # Detect faces in the current image
+    known_face_encodings = face_recognition.face_encodings(current_img)
+
+    # Compare faces
+    for known_face in known_face_encodings:
+        results = face_recognition.compare_faces(
+            uploaded_face_encodings, known_face)
+        if True in results:
+            return True
 # Example usage:
 # with open("path_to_your_image.jpg", "rb") as file_obj:
 #     result, success = face_matcher(file_obj=file_obj)

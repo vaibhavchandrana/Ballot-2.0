@@ -112,13 +112,13 @@ class UserLoginSerializer(serializers.Serializer):
 
 
 class ElectionSerializer(serializers.ModelSerializer):
-    created_by_admin = AdminSerializer(source='created_by', read_only=True)
+    # created_by = AdminSerializer(source='created_by', read_only=True)
     candidates_count = serializers.SerializerMethodField()
 
     class Meta:
         model = Election
         fields = ['id', 'election_name', 'generation_date',
-                  'expiry_date', 'created_by_admin', 'access_type',
+                  'expiry_date', 'created_by', 'access_type',
                   'status', 'candidates_count']
 
     def get_candidates_count(self, obj):

@@ -9,8 +9,8 @@ class Voter(models.Model):
     phone_number = models.CharField(max_length=20)
     password = models.CharField(max_length=128)
     photo = models.ImageField(upload_to='photos/')
-    participated_in = models.ForeignKey(
-        'Election', on_delete=models.SET_NULL, null=True, blank=True)
+    participated_in = models.ManyToManyField(
+        'Election', blank=True)
 
     def __str__(self):
         return self.full_name
@@ -65,7 +65,7 @@ class Vote(models.Model):
         'Candidate', on_delete=models.CASCADE, related_name='votes')
     election = models.ForeignKey(
         'Election', on_delete=models.CASCADE, related_name='candiatevotes')
-    time_cast = models.DateTimeField(default=timezone.now)
+    time_cast = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return f"Vote for {self.candidate.name} in {self.election.election_name} at {self.time_cast}"

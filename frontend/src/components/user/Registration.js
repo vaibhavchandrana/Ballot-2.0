@@ -1,9 +1,10 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import CameraCapture from "./CameraCapture";
+import CameraCapture from "./CameraCapture"; // Assuming this is your custom component for capturing images
 import { Form } from "react-bootstrap";
 import "../../css/signin.css";
 import { backendUrl } from "../../backendUrl";
+
 export const Registration = () => {
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
@@ -17,7 +18,9 @@ export const Registration = () => {
   const [agreeToShareImage, setAgreeToShareImage] = useState(false);
 
   const url = backendUrl();
-  function handleAutoClick() {
+
+  const handleAutoClick = (e) => {
+    e.preventDefault(); // Prevent form from submitting when validations fail
     if (
       !fullName ||
       !email ||
@@ -34,62 +37,61 @@ export const Registration = () => {
       return;
     }
     if (!agreeToShareImage) {
-      setErrorMessage("Please agree to share your image being saved.");
+      setErrorMessage("Please agree to share your image.");
       return;
     }
+
     setAutoCaptureFlag(true);
-  }
-  const handleRegistration = async (file) => {
-    try {
-      if (!image) {
-        setErrorMessage("Please capture your image ");
-        return;
-      }
-      const formData = new FormData();
-
-      // Append other form fields to the FormData object
-      formData.append("full_name", fullName);
-      formData.append("email", email);
-      formData.append("age", age);
-      formData.append("phone_number", phone);
-      formData.append("password", password);
-      formData.append("image", image);
-
-      // Make the API call to send the data to the server
-      const response = await fetch(`${url}/register/`, {
-        method: "POST",
-        body: formData,
-      });
-
-      if (response.ok) {
-        // Registration successful, perform any necessary actions (e.g., redirect)
-        console.log("Registration successful");
-      } else {
-        // Registration failed, handle the error
-        console.error("Registration failed:", response.status);
-      }
-    } catch (error) {
-      console.error("Error registering:", error);
-    }
   };
 
-  const handleImageUpload = (file) => {
-    if (file) {
-      handleRegistration(file);
-    }
-    setErrorMessage("");
-  };
+  useEffect(() => {
+    const handleRegistration = async () => {
+      if (image && agreeToShareImage && autoCaptureFlag) {
+        try {
+          const formData = new FormData();
+          formData.append("full_name", fullName);
+          formData.append("email", email);
+          formData.append("age", age);
+          formData.append("phone_number", phone);
+          formData.append("password", password);
+          formData.append("image", image);
+
+          const response = await fetch(`${url}/register/`, {
+            method: "POST",
+            body: formData,
+          });
+
+          if (response.ok) {
+            console.log("Registration successful");
+            // Redirect or update UI accordingly
+          } else {
+            console.error("Registration failed:", response.status);
+          }
+        } catch (error) {
+          console.error("Error during registration:", error);
+        }
+      }
+    };
+
+    handleRegistration();
+  }, [
+    image,
+    agreeToShareImage,
+    autoCaptureFlag,
+    fullName,
+    email,
+    age,
+    phone,
+    password,
+    url,
+  ]);
+
   return (
     <div className="body">
       <div className="container extra">
         <div className="title">Registration</div>
         <div className="content">
-          {/*------------------registration form start here------------------------------------*/}
-          <form
-            className="form"
-            onSubmit={handleRegistration}
-            encType="multipart/form-data"
-          >
+          <form className="form" encType="multipart/form-data">
             <div className="user-details">
               <div className="input-box">
                 <span className="details">Full Name</span>
@@ -174,24 +176,42 @@ export const Registration = () => {
                 <span id="error4" className="error" />
               </div>
             </div>
+            {/* Checkbox for Image Sharing Agreement */}
+            <div className="input-box" id="checkbox">
+              <input
+                className="form-check-input"
+                type="checkbox"
+                checked={agreeToShareImage}
+                id="flexCheckDefault"
+                onChange={() => setAgreeToShareImage(!agreeToShareImage)}
+              />
+              <label className="form-check-label" htmlFor="flexCheckDefault">
+                Agree to share your image being saved
+              </label>
+            </div>
+
+            {/* Error Message Display */}
             <span id="error5" className="error">
               {errorMessage}
             </span>
+
+            {/* Registration Button */}
             <div className="button">
               <input
-                type="button"
+                type="submit"
                 onClick={handleAutoClick}
                 value="Register"
                 id="mysubmit"
               />
             </div>
           </form>
-          {/*------------------ registration form ends here------------------------------------*/}
         </div>
-        {autoCaptureFlag && <CameraCapture setImage={handleImageUpload} />}
+        {/* Show CameraCapture if flag is true */}
+        {autoCaptureFlag && <CameraCapture setImage={setImage} />}
+
+        {/* Link to Login Page */}
         <div className="signup1">
           <i style={{ color: "white" }}> Registered Already </i>
-          {/*------------------link to login page  ------------------------------------*/}
           <Link to="/login">
             <button className="btn">Sign in</button>
           </Link>

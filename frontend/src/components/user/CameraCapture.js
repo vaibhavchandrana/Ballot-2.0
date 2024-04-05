@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from "react";
 import Webcam from "react-webcam";
 import { Modal, Button } from "react-bootstrap";
 
-function CameraCapture(propTypes) {
+function CameraCapture({ setImage }) {
   const [showModal, setShowModal] = useState(true);
   const [capturedImage, setCapturedImage] = useState(null);
   const [timer, setTimer] = useState(10); // Initial timer value in seconds
@@ -17,7 +17,8 @@ function CameraCapture(propTypes) {
     if (webcamRef.current) {
       const imageSrc = webcamRef.current.getScreenshot();
       setCapturedImage(imageSrc);
-      propTypes.setImage(imageSrc);
+      setImage(imageSrc); // Directly use setImage from props
+      
     }
   };
 
@@ -29,20 +30,10 @@ function CameraCapture(propTypes) {
       }, 1000);
     } else if (timer === 0 && showModal) {
       capture();
-      clearInterval(interval);
       closeModal();
     }
     return () => clearInterval(interval);
-  }, [timer, showModal, propTypes]);
-
-  useEffect(() => {
-    const countdown = setTimeout(() => {
-      if (showModal && timer > 0) {
-        setTimer((prevTimer) => prevTimer - 1);
-      }
-    }, 1000);
-    return () => clearTimeout(countdown);
-  }, [timer, showModal]);
+  }, [timer, showModal, setImage]); // Remove propTypes from dependency array, replace with setImage
 
   return (
     <div>
@@ -52,28 +43,29 @@ function CameraCapture(propTypes) {
         </Modal.Header>
         <Modal.Body>
           {capturedImage ? (
-            <img src={capturedImage} alt="Captured" />
+            <img
+              src={capturedImage}
+              alt="Captured"
+              style={{ width: "100%", height: "auto" }}
+            />
           ) : (
             <Webcam
               audio={false}
               ref={webcamRef}
               screenshotFormat="image/jpeg"
-              style={{ width: "100%", height: "auto" }}
-              mirrored={false}
+              width="100%"
             />
           )}
         </Modal.Body>
         <Modal.Footer>
-          <>
-            <Button variant="secondary" onClick={closeModal}>
-              Cancel
+          <Button variant="secondary" onClick={closeModal}>
+            Cancel
+          </Button>
+          {!capturedImage && (
+            <Button variant="primary" onClick={capture} disabled={timer > 0}>
+              Take Photo Now
             </Button>
-            {!capturedImage && (
-              <Button variant="primary" onClick={capture} disabled={timer > 0}>
-                Take Photo
-              </Button>
-            )}
-          </>
+          )}
         </Modal.Footer>
       </Modal>
     </div>
