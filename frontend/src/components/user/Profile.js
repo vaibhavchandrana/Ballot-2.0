@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import "../../css/profile.css";
-import bar from "../../images/bar.png";
 import bharat from "../../images/bharat.png";
 import { backendUrl, imageUrl } from "../../backendUrl";
 import { useNavigate } from "react-router-dom";
