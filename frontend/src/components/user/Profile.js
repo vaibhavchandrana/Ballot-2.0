@@ -63,7 +63,7 @@ export const Profile = () => {
         <br />
         <center>
           <img
-            src={`${image}${profileData.photo}`}
+            src={`${profileData.photo}`}
             alt=""
             style={{ width: "100%", padding: "10%" }}
           />

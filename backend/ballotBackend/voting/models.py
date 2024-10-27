@@ -11,7 +11,7 @@ class Voter(models.Model):
     photo = models.ImageField(upload_to='photos/')
     participated_in = models.ManyToManyField(
         'Election', blank=True)
-
+    uuid=models.UUIDField(null=True,blank=True)
     def __str__(self):
         return self.full_name
 

@@ -13,10 +13,8 @@ from .models import Voter, Election
 from django.core.files.base import ContentFile
 import base64
 from datetime import date
-from .helper import face_matcher, serve_image, face_matches
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
-import face_recognition
 from PIL import Image
 import numpy as np
 import io
@@ -27,87 +25,7 @@ from .serializers import CandidateSerializer
 from rest_framework import viewsets
 from django.db.models import Count
 from rest_framework.exceptions import NotFound, ValidationError
-import redis
-
-
-class RedisConnectionPool:
-    _pool = None
-
-    @classmethod
-    def get_connection(cls):
-        if cls._pool is None:
-            cls._pool = redis.ConnectionPool(host='localhost', port=6379, db=0)
-        return redis.Redis(connection_pool=cls._pool)
-
-
-def face_matcher(embedding):
-    # Connect to Redis
-    r = redis.Redis(host='localhost', port=6379, db=0)
-
-    # Get all stored embeddings from Redis
-    all_embeddings = r.hgetall('face_embeddings')
-
-    if not all_embeddings:
-        return True, "No face embeddings found in Redis."
-
-    # Deserialize and compare each stored embedding
-    for user_id, saved_embedding in all_embeddings.items():
-        saved_embedding = pickle.loads(saved_embedding)
-        match = np.array(embedding) == np.array(saved_embedding)
-
-        if match.all():
-            return False, f"Face embedding already exists for user with ID {user_id.decode()}."
-
-    # If no match found with any stored embedding
-    return True, "No matching face embedding found in Redis."
-
-
-def get_embedding_from_image(image_data):
-    # Decode base64 image data
-    _, base64_data = image_data.split(",", 1)
-    binary_data = base64.b64decode(base64_data)
-
-    # Load the image and extract face embedding
-    image = face_recognition.load_image_file(ContentFile(binary_data))
-    face_encodings = face_recognition.face_encodings(image)
-
-    if not face_encodings:
-        return None, "No face detected or face embedding is unclear."
-
-    # Assume the first face detected is the user's face
-    return face_encodings[0], "Face embedding extracted successfully."
-
-
-@csrf_exempt
-def detect_face(request):
-    if request.method == 'POST' and request.FILES['image']:
-        time.sleep(5)
-        # Read the uploaded image
-        uploaded_image = request.FILES['image']
-        image_data = uploaded_image.read()
-        image = Image.open(io.BytesIO(image_data))
-
-        # Convert the image to a numpy array
-        image_np = np.array(image)
-
-        # Detect faces in the image
-        face_locations = face_recognition.face_locations(image_np)
-
-        # Extract face coordinates
-        face_coordinates = []
-        for face_location in face_locations:
-            top, right, bottom, left = face_location
-            face_coordinates.append({
-                'top': top,
-                'right': right,
-                'bottom': bottom,
-                'left': left
-            })
-
-        return JsonResponse({'faces': face_coordinates})
-
-    return JsonResponse({'error': 'Invalid request'})
-
+from .face_recognition import process_image,compare_image_with_embedding
 
 class UserRegistrationView(APIView):
     def post(self, request):
@@ -120,49 +38,62 @@ class UserRegistrationView(APIView):
             if not image_data:
                 return Response({"error": "Image data not provided."}, status=status.HTTP_400_BAD_REQUEST)
 
+            try:
+                # Decode the base64 image data to bytes
+                header, image_data_base64 = image_data.split(',', 1)
+                image_data_bytes = base64.b64decode(image_data_base64)
+            except Exception as e:
+                return Response({"error": f"Invalid image format: {str(e)}"}, status=status.HTTP_400_BAD_REQUEST)
+
             # Extract face embedding from image data
-            embedding, message = get_embedding_from_image(image_data)
+            uuid, message = process_image(image_data_bytes)
 
-            if embedding is None:
-                return Response({"error": message}, status=status.HTTP_400_BAD_REQUEST)
-
-            # Check face matching with all stored embeddings
-            match, message = face_matcher(embedding)
-
-            if not match:
+            if uuid is None:
                 return Response({"error": message}, status=status.HTTP_400_BAD_REQUEST)
 
             # Assign the embedding to the serializer's validated data
-            serializer.validated_data['embedding'] = embedding
+            serializer.validated_data['uuid'] = uuid
+
+            # Save the image to the database
+            image_file = ContentFile(image_data_bytes, name=f"{uuid}.jpg")
+            serializer.validated_data['photo'] = image_file
 
             # Save the serializer with the image data
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-
 class UserLoginView(APIView):
     def post(self, request):
         email = request.data.get('email')
         password = request.data.get('password')
-        user_info = Voter.objects.values().get(email=email)
-        if user_info is not None:
-            if password == user_info['password']:
-                return Response({'message': 'Login successful.'}, status=status.HTTP_200_OK)
-
+        
+        try:
+            user_info = Voter.objects.get(email=email)
+        except Voter.DoesNotExist:
+            return Response({'message': 'User does not exist.'}, status=status.HTTP_404_NOT_FOUND)
+        
+        if password == user_info.password:
+            return Response({'message': 'Login successful.'}, status=status.HTTP_200_OK)
+        
         return Response({'message': 'Invalid email or password.'}, status=status.HTTP_401_UNAUTHORIZED)
+
 
 
 class GetProfileDetails(APIView):
     def post(self, request):
         email = request.data.get('email')
-        if email:
+        if not email:
+            return Response({'message': 'Email not provided'}, status=status.HTTP_400_BAD_REQUEST)
+        
+        try:
             user_info = Voter.objects.values().get(email=email)
-            if user_info is not None:
-                user_info['photo'] = serve_image(user_info['photo'])
-                return Response(user_info, status=status.HTTP_200_OK)
-
-            return Response({'message': 'User Details not found'}, status=status.HTTP_401_UNAUTHORIZED)
+            # Construct the complete URL for serving the image
+            photo_url = f"http://127.0.0.1:8000/media/{user_info['photo']}"
+            user_info['photo'] = photo_url
+            return Response(user_info, status=status.HTTP_200_OK)
+        except Voter.DoesNotExist:
+            return Response({'message': 'User Details not found'}, status=status.HTTP_404_NOT_FOUND)
 
 
 class ElectionAPIView(APIView):
@@ -348,20 +279,15 @@ class AddVoteView(APIView):
             election = Election.objects.get(id=election_id)
             if election in voter.participated_in.all():
                 return Response({'error': 'You have already participated in this election'}, status=status.HTTP_400_BAD_REQUEST)
-            if image_uri:
-                # Split the data URI to get the Base64-encoded data
-                _, base64_data = image_uri.split(",", 1)
+            
+            # Decode the base64 image data to bytes
+            try:
+                header, image_data_base64 = image_uri.split(',', 1)
+                image_data_bytes = base64.b64decode(image_data_base64)
+            except Exception as e:
+                return Response({"error": f"Invalid image format: {str(e)}"}, status=status.HTTP_400_BAD_REQUEST)
 
-                # Decode the Base64 data
-                binary_data = base64.b64decode(base64_data)
-
-                # Specify the file name and extension
-                file_name = f"image_temp.jpg"
-
-                # Create a ContentFile from the binary data
-                image_file = ContentFile(binary_data, name=file_name)
-                print(face_matches(image_file, voter.photo))
-            if face_matches(image_file, voter.photo):
+            if compare_image_with_embedding(image_data_bytes, voter.uuid):
                 try:
                     Vote.objects.create(**serializer.validated_data)
                     voter.participated_in.add(election)

@@ -1,0 +1,7 @@
+django 
+python-dotenv
+djangorestframework
+django-storages
+django-cors-headers
+deepface
+pinecone-client

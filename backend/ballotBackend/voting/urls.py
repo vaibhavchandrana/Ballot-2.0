@@ -1,7 +1,7 @@
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
 from .views import AdminViewSet
-from .views import UserRegistrationView, UserLoginView, GetProfileDetails, ElectionAPIView, ElectionViaAdminAPIView, ElectionAdminAPIView, detect_face, add_candidate, edit_candidate, candidates_by_election, delete_candidate, check_password_for_election, AddVoteView, register_admin, AdminLoginView
+from .views import UserRegistrationView, UserLoginView, GetProfileDetails, ElectionAPIView, ElectionViaAdminAPIView, ElectionAdminAPIView, add_candidate, edit_candidate, candidates_by_election, delete_candidate, check_password_for_election, AddVoteView, register_admin, AdminLoginView
 router = DefaultRouter()
 router.register(r'admins', AdminViewSet)
 urlpatterns = [
@@ -16,7 +16,7 @@ urlpatterns = [
          name='election-detail'),
     path('get/elections/admin/<int:admin_id>', ElectionViaAdminAPIView.as_view(),
          name='election-detail'),
-    path('detect_face/', detect_face),
+#     path('detect_face/', detect_face),
     path('candidates/add/', add_candidate, name='add_candidate'),
     path('candidates/edit/<int:pk>/', edit_candidate, name='edit_candidate'),
     path('candidates/delete/<int:pk>/',
