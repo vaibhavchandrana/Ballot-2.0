@@ -249,16 +249,22 @@ def delete_candidate(request, pk):
 @api_view(['GET'])
 def candidates_by_election(request, election_id):
     """
-    Return a list of candidates for a specific election.
+    Return a list of candidates and election details for a specific election.
     """
     try:
+        election = Election.objects.get(pk=election_id)
         candidates = Candidate.objects.filter(election_id=election_id)
-
+    except Election.DoesNotExist:
+        return Response({'error': 'Election not found.'}, status=status.HTTP_404_NOT_FOUND)
     except Candidate.DoesNotExist:
         return Response({'error': 'No candidates found for this election.'}, status=status.HTTP_404_NOT_FOUND)
 
-    serializer = CandidateSerializer(candidates, many=True)
-    return Response(serializer.data)
+    election_serializer = ElectionSerializer(election)
+    candidates_serializer = CandidateSerializer(candidates, many=True)
+    return Response({
+        'election': election_serializer.data,
+        'candidates': candidates_serializer.data
+    })
 
 
 class AddVoteView(APIView):

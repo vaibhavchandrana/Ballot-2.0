@@ -1,67 +1,69 @@
 .candidate-card {
+  width: 280px;
+  background-color: white;
+  border-radius: 15px;
+  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  text-align: center;
   display: flex;
+  flex-direction: column;
   align-items: center;
-  justify-content: space-between;
-  background-color: #f06292; /* Example color */
-  padding: 10px;
-  border-radius: 10px;
-  color: white;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   margin: 10px;
 }
 
 .candidate-image img {
+  width: 100%;
+  max-width: 160px;
+  height: auto;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
   border-radius: 50%;
-  width: 60px; /* adjust as needed */
-  height: 60px; /* adjust as needed */
+  margin-bottom: 10px;
 }
 
-.candidate-info h2,
+.candidate-info h2 {
+  font-size: 1.2rem;
+  color: #333;
+  margin: 10px 0 5px;
+}
+
 .candidate-info p {
-  margin: 0;
-  padding-left: 10px; /* adjust as needed */
+  font-size: 0.9rem;
+  color: #666;
+}
+
+.vote-button-parent {
+  display: flex;
+  gap: 10px;
+  margin-top: 15px;
+  justify-content: center;
+  width: 100%;
 }
 
 .vote-button-v2 button {
-  background-color: #fff;
+  padding: 8px 16px;
+  background-color: #6c63ff;
+  color: white;
   border: none;
   border-radius: 20px;
-  padding: 10px 20px;
   cursor: pointer;
-  outline: none;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-  transition: background-color 0.3s;
-  margin: 0px 3px 0 3px;
+  transition: background-color 0.3s, border 0.3s, color 0.3s;
 }
 
 .vote-button-v2 button:hover {
-  background-color: #ddd;
+  background-color: white;
+  border: solid #4f46e5 2px;
+  color: #4f46e5;
 }
-.vote-button-parent {
-  display: flex;
-  justify-content: space-evenly;
+
+.vote-button-v2 button:focus {
+  outline: none;
 }
-/* Responsive Design */
-@media (max-width: 768px) {
-  .vote-button-v2 button {
-    background-color: #fff;
-    border: none;
-    border-radius: 20px;
-    cursor: pointer;
-    outline: none;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-    transition: background-color 0.3s;
-    display: flex;
-    justify-content: center;
-    letter-spacing: 0;
-    padding: 4px 0 2px 0;
-    font-size: 10px;
-    height: 20px;
-  }
-  .vote-button-parent {
-    margin-top: 10px;
-  }
-  .info-row p {
-    font-size: 8px;
-  }
+
+.form-group-modals {
+  margin-bottom: 15px;
+}
+
+.modal-content {
+  padding: 20px;
 }

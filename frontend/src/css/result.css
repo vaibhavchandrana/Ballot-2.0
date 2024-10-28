@@ -99,6 +99,18 @@
   html {
     font-size: 90%;
   }
+  .child {
+    height: 10vh;
+    overflow: hidden;
+    border-radius: 0.5em;
+    text-decoration: none;
+    background: purple;
+    margin: 20px;
+    padding: 2.75em 2.5em;
+    box-shadow: 0 1.5em 2.5em -0.5em rgba(#000000, 0.7);
+    transition: transform 0.45s ease 0.45s ease;
+    flex: 1 1 35vh;
+  }
 }
 @media (max-width: 400px) {
   html {
@@ -110,13 +122,13 @@
     justify-content: space-around;
     border: 0.75em solid white;
     font-family: "Open Sans", sans-serif;
-    width: 80vw;
+    width: 100vw;
     height: auto;
     flex-wrap: wrap;
     transition: all 0.2 linear;
   }
   .child {
-    height: 25vh;
+    height: 20vh;
     overflow: hidden;
     border-radius: 0.5em;
     text-decoration: none;

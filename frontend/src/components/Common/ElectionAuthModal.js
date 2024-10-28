@@ -19,10 +19,11 @@ function ElectionModal(props) {
         password: key,
         election_id: props.id,
       });
-
+      const isAdmin = localStorage.getItem("ballot_login_as") == "admin";
       // Handle success
       toast.success("Password Varified!");
-      navigate(`/election_voting/${props.id}`);
+      if (isAdmin) navigate(`/admin/election/details/${props.id}`);
+      else navigate(`/election_voting/${props.id}`);
     } catch (error) {
       // Handle error if something happened in setting up the request that triggered an Error
       toast.error(`Inccorect Password. Unable to Proceed`);

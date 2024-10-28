@@ -35,7 +35,7 @@ const ElectionList = () => {
 
     return { openElection: open, closeElection: close };
   }, [electionList]);
-
+  const isAdmin = localStorage.getItem("ballot_login_as") == "admin";
   return (
     <div>
       <Card>
@@ -62,7 +62,7 @@ const ElectionList = () => {
         <Card.Body style={{ minHeight: "80vh" }}>
           <ElectionItem
             electionList={activeTab === "active" ? openElection : closeElection}
-            usedIn={"user"}
+            usedIn={isAdmin ? "admin" : "user"}
           />
         </Card.Body>
       </Card>

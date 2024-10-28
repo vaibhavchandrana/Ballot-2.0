@@ -4,8 +4,7 @@ import axios from "axios";
 import profile from "../../images/profile.png";
 import { useParams } from "react-router-dom";
 import NoDataComponent from "./NoDataComponent";
-import { backendUrl } from "../../backendUrl";
-import { imageUrl } from "../../backendUrl";
+import { backendUrl, imageUrl } from "../../backendUrl";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import CameraCapture from "./CameraCapture";
@@ -18,10 +17,14 @@ export const Voting = () => {
   const [imageFile, setImage] = useState(null);
   const [autoCaptureFlag, setAutoCaptureFlag] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [candidateList, setCandidates] = useState([]);
+  const [electionDetails, setElectionDetails] = useState(null);
+
   const updateVoterId = (id) => {
     setVoterId(id);
     setAutoCaptureFlag(false);
   };
+
   const handleImageUpload = (file) => {
     setImage(file);
     if (file) {
@@ -30,20 +33,23 @@ export const Voting = () => {
   };
 
   useEffect(() => {
-    if (localStorage.getItem("ballot_login_as") != "user") {
+    if (localStorage.getItem("ballot_login_as") !== "user") {
       navigate("/login");
     }
   }, []);
+
   const url = backendUrl();
-  const [candidateList, setCandidates] = useState([]);
-  async function getCandidatesaList() {
+
+  async function getCandidatesList() {
     try {
       const response = await axios.get(`${url}/candidates/election/${id}/`);
-      setCandidates(response.data);
+      setCandidates(response.data.candidates);
+      setElectionDetails(response.data.election);
     } catch (error) {
-      console.error("Error sending data:", error);
+      console.error("Error fetching candidates:", error);
     }
   }
+
   async function addVote(imageFile) {
     try {
       setLoading(true);
@@ -54,70 +60,86 @@ export const Voting = () => {
         image_uri: imageFile,
       });
       setLoading(false);
-      // Handle success
       toast.success("Vote added successfully!");
     } catch (error) {
-      // Handle error if it is other than success range
-      if (error.response) {
-        toast.error(` ${error.response.data.error || error.response.status}`);
-      } else if (error.request) {
-        // Handle error if  request was made but no response was received
-        toast.error("No response from server");
-      } else {
-        // Handle error if something happened in setting up the request that triggered an Error
-        toast.error("Error: " + error.message);
-      }
+      setLoading(false);
+      toast.error("Error: " + (error.response?.data?.error || error.message));
     }
   }
+
   useEffect(() => {
     if (id) {
-      getCandidatesaList();
+      getCandidatesList();
     }
   }, [id]);
-  if (candidateList.length == 0)
-    return (
-      <>
-        <NoDataComponent />
-      </>
-    );
+
+  if (candidateList.length === 0) return <NoDataComponent />;
+
   return (
-    <div className="voting_body">
-      {candidateList.map((item) => (
-        <div className="custom-card">
-          <div className="custom-card-body">
-            <div className="profile">
+    <div className="voting_page">
+      {electionDetails && (
+        <header className="election-header">
+          <div className="row">
+            <div className="col-12 col-md-6 col-xl-4">
+              <h2>{electionDetails.election_name}</h2>
+            </div>
+            <div className="col-12 col-md-6 col-xl-4">
+              <p>
+                <strong>Available Dates:</strong> {electionDetails.generation_date}{" "}
+                to {electionDetails.expiry_date}
+              </p>
+            </div>
+            <div className="col-12 col-md-6 col-xl-4">
+              <p>
+                <strong>Status:</strong> {electionDetails.status}
+              </p>
+            </div>
+            <div className="col-12 col-md-6 col-xl-4">
+              <p>
+                <strong>Candidates Count:</strong>{" "}
+                {electionDetails.candidates_count}
+              </p>
+            </div>
+            <div className="col-12 col-md-6 col-xl-4">
+              <p>
+                <strong>Created By:</strong> {electionDetails.created_by_name}
+              </p>
+            </div>
+          </div>
+        </header>
+      )}
+      <div className="voting_body">
+        <div className="card-container">
+          {candidateList.map((item) => (
+            <div className="custom-card" key={item.id}>
               <img
                 src={item.photo ? `${image}${item.photo}` : profile}
                 alt="profile"
-                style={{ borderRadius: "50%", height: "120px", width: "120px" }}
+                className="profile-img"
               />
+              <h3 className="candidate-name">{item.name}</h3>
+              <p className="candidate-info">{item.subinformation}</p>
+              <button
+                className={`vote-button ${voterId === item.id ? "active" : ""}`}
+                onClick={() => updateVoterId(item.id)}
+              >
+                Vote
+              </button>
             </div>
-            <div className="detail">
-              <p id="big">{item.name}</p>
-              <p id="small">{item.subinformation}</p>
-            </div>
-            <div
-              className={
-                voterId == item.id
-                  ? "voting-button voting-button-active"
-                  : "voting-button"
-              }
-            >
-              <button onClick={() => updateVoterId(item.id)}>Vote</button>
-            </div>
-          </div>
+          ))}
         </div>
-      ))}
-      {autoCaptureFlag && <CameraCapture setImage={handleImageUpload} />}
-      <center>
-        <button
-          type="submit"
-          id="subbtn"
-          onClick={() => setAutoCaptureFlag(true)}
-        >
-          {loading ? "Adding..." : "Confirm"}
-        </button>
-      </center>
+        {autoCaptureFlag && <CameraCapture setImage={handleImageUpload} />}
+        <center>
+          <button
+            type="submit"
+            id="submit-btn"
+            onClick={() => setAutoCaptureFlag(true)}
+            disabled={loading}
+          >
+            {loading ? "Adding..." : "Confirm"}
+          </button>
+        </center>
+      </div>
     </div>
   );
 };

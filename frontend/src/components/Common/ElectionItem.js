@@ -14,7 +14,9 @@ function ElectionItem({ electionList, usedIn }) {
   const navigate = useNavigate();
   useEffect(() => {
     setElectionItems(electionList);
-  }, [electionList]);
+    setIsAdmin(usedIn == "admin");
+  }, [electionList, isAdmin]);
+  console.log(isAdmin);
   const handleShowModal = (access, id) => {
     if (access === "OPEN_FOR_ALL") {
       if (isAdmin) navigate(`/admin/election/details/${id}`);
@@ -34,9 +36,9 @@ function ElectionItem({ electionList, usedIn }) {
     <>
       {electionItems.map((item, index) => {
         return (
-          <Card key={index} className="mb-2" style={{ width: "90%" }}>
+          <Card key={index} className="mb-2" style={{ width: "100%" }}>
             <Card.Body className=" row mt-2" style={{ width: "100%" }}>
-              <div className="col-10 col-md-10 mt-2">
+              <div className="col-12 col-md-8 mt-2">
                 <Card.Title>
                   {item.election_name} (Active till : {item.expiry_date})
                 </Card.Title>
@@ -47,7 +49,7 @@ function ElectionItem({ electionList, usedIn }) {
                   <div>Candidates: {item.candidates_count}</div>
                 </Card.Text>
               </div>
-              <div className="col-2 col-md-2 d-flex justify-content-center align-items-center gap-2 ">
+              <div className="col-12 col-md-4 d-flex justify-content-end align-items-center gap-2 mt-2 mt-md-0">
                 {" "}
                 {new Date(item.expiry_date) > new Date() && (
                   <Button
@@ -55,6 +57,11 @@ function ElectionItem({ electionList, usedIn }) {
                     onClick={() => handleShowModal(item.access_type, item.id)}
                   >
                     Open
+                  </Button>
+                )}
+                {item.status == "Open" && (
+                  <Button variant="primary" onClick={() => showResult(item.id)}>
+                    Close Election
                   </Button>
                 )}
                 <Button variant="primary" onClick={() => showResult(item.id)}>

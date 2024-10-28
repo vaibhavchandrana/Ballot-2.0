@@ -65,7 +65,7 @@ const ElectionDetails = () => {
   async function getCandidatesaList() {
     try {
       const response = await axios.get(`${url}/candidates/election/${id}/`);
-      setCandidates(response.data);
+      setCandidates(response.data.candidates);
     } catch (error) {
       console.error("Error sending data:", error);
     }
@@ -168,7 +168,7 @@ const ElectionDetails = () => {
         <h1>Candidate Lists:</h1>
         <div className="row" style={{ width: "100%" }}>
           {candidates.map((item, index) => (
-            <div className="col-12 col-md-6">
+            <div className="col-12 col-md-6 col-lg-3">
               <CandidateCard data={item} id={id} refresh={getCandidatesaList} />
             </div>
           ))}

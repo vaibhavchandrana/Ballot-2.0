@@ -112,17 +112,20 @@ class UserLoginSerializer(serializers.Serializer):
 
 
 class ElectionSerializer(serializers.ModelSerializer):
-    # created_by = AdminSerializer(source='created_by', read_only=True)
     candidates_count = serializers.SerializerMethodField()
+    created_by_name = serializers.SerializerMethodField()
 
     class Meta:
         model = Election
         fields = ['id', 'election_name', 'generation_date',
-                  'expiry_date', 'created_by', 'access_type',
-                  'status', 'candidates_count']
+                  'expiry_date', 'created_by', 'created_by_name',
+                  'access_type', 'status', 'candidates_count']
 
     def get_candidates_count(self, obj):
         return obj.candidates.count()
+
+    def get_created_by_name(self, obj):
+        return obj.created_by.full_name if obj.created_by else None
 
     def validate(self, data):
         election_name = data.get('election_name')
@@ -141,7 +144,6 @@ class ElectionSerializer(serializers.ModelSerializer):
                 "Expiry date must be greater than the generation date.")
 
         return data
-
 
 class ElectionSerializerAdmin(serializers.ModelSerializer):
     class Meta:

@@ -7,6 +7,7 @@ import ChartComponent from "./ChartComponent";
 import axios from "axios";
 import NoDataComponent from "./NoDataComponent";
 import { useNavigate } from "react-router-dom";
+import WebSocketComponent from "./WebSocket";
 export const Result = () => {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -21,7 +22,7 @@ export const Result = () => {
   async function getCandidatesaList() {
     try {
       const response = await axios.get(`${url}/candidates/election/${id}/`);
-      setCandidates(response.data);
+      setCandidates(response.data.candidates);
     } catch (error) {
       console.error("Error sending data:", error);
     }
@@ -39,10 +40,11 @@ export const Result = () => {
     );
   return (
     <div>
+      <WebSocketComponent />
       <div className="result_body">
         <div className="parent row pl-4 d-flex justify-content-center">
           {candidateList.map((item, index) => (
-            <div className="child col-3">
+            <div className="child col-11 col-md-6 col-lg-3">
               <h3 className="h3" id={`cd${(index + 1) % 3}`}>
                 {item.no_of_votes}
               </h3>
