@@ -1,4 +1,4 @@
-from django.utils import timezone
+
 from django.db import models
 from channels.layers import get_channel_layer
 from asgiref.sync import async_to_sync
@@ -42,15 +42,15 @@ class Election(models.Model):
         ('Open', 'Open'),
         ('Closed', 'Closed'),
     )
-    ACCESS_TYPE = (('OPEN_FOR_ALL', 'open_for_all'), ("VIA_URL", "via_url"))
-
+    ACCESS_TYPE = (('OPEN_FOR_ALL', 'open_for_all'), ("VIA_PASSWORD", "via_password"))
     election_name = models.CharField(max_length=255)
-    generation_date = models.DateField()
-    expiry_date = models.DateField()
+    generation_date = models.DateTimeField()
+    expiry_date = models.DateTimeField()
     created_by = models.ForeignKey('Admin', on_delete=models.CASCADE, null=True)
     access_type = models.CharField(max_length=20, choices=ACCESS_TYPE, default="open_for_all")
     status = models.CharField(max_length=10, choices=ELECTION_STATUS_CHOICES, default='Open')
     password = models.CharField(max_length=128)
+    make_result_pubic=models.BooleanField(default=True)
 
     def __str__(self):
         return self.election_name
@@ -71,6 +71,9 @@ class Vote(models.Model):
 
     def notify_election_results(self):
         channel_layer = get_channel_layer()
+        if channel_layer is None:
+            raise RuntimeError("Channel layer is not configured properly.")
+        
         election_id = self.election.id
         election = Election.objects.get(id=election_id)
 

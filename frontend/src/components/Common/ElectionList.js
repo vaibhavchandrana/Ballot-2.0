@@ -12,21 +12,29 @@ const ElectionList = () => {
   const [electionList, setElectionList] = useState([]);
   const [activeTab, setActiveTab] = useState("active");
 
-  useEffect(() => {
-    async function fetchElections() {
+  const fetchElections = async () => {
+    try {
       const response = await axios.get(`${url}/elections/0/`);
       setElectionList(response.data);
+    } catch (error) {
+      console.error("Error fetching elections:", error);
     }
+  };
+
+  useEffect(() => {
     fetchElections();
   }, []);
 
   const { openElection, closeElection } = useMemo(() => {
-    let open = [];
-    let close = [];
     const currentDate = new Date();
+    const open = [];
+    const close = [];
 
     electionList.forEach((election) => {
-      if (new Date(election.expiry_date) < currentDate) {
+      if (
+        new Date(election.expiry_date) < currentDate ||
+        election.status === "Closed"
+      ) {
         close.push(election);
       } else {
         open.push(election);
@@ -35,7 +43,9 @@ const ElectionList = () => {
 
     return { openElection: open, closeElection: close };
   }, [electionList]);
-  const isAdmin = localStorage.getItem("ballot_login_as") == "admin";
+
+  const isAdmin = localStorage.getItem("ballot_login_as") === "admin";
+
   return (
     <div>
       <Card>
@@ -63,6 +73,7 @@ const ElectionList = () => {
           <ElectionItem
             electionList={activeTab === "active" ? openElection : closeElection}
             usedIn={isAdmin ? "admin" : "user"}
+            fetchElections={fetchElections}
           />
         </Card.Body>
       </Card>

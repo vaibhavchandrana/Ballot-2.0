@@ -6,7 +6,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from .serializers import UserRegistrationSerializer
-from .serializers import ElectionSerializer, ElectionSerializerAdmin
+from .serializers import ElectionSerializer, ElectionSerializerAdmin,ElectionPatchSerailizers,ElectionViewSerializer
 from django.contrib.auth import authenticate
 from django.contrib.auth.hashers import check_password
 from .models import Voter, Election
@@ -26,6 +26,7 @@ from rest_framework import viewsets
 from django.db.models import Count
 from rest_framework.exceptions import NotFound, ValidationError
 from .face_recognition import process_image,compare_image_with_embedding
+from django.utils import timezone
 
 class UserRegistrationView(APIView):
     def post(self, request):
@@ -103,6 +104,22 @@ class ElectionAPIView(APIView):
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+    def patch(self, request, election_id=None):
+        if not election_id:
+            return Response({"error": "Election ID must be provided."}, status=status.HTTP_400_BAD_REQUEST)
+        
+        try:
+            election = Election.objects.get(id=election_id)
+        except Election.DoesNotExist:
+            return Response({"error": "Election not found"}, status=status.HTTP_404_NOT_FOUND)
+        
+        serializer = ElectionPatchSerailizers(election, data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def get(self, request, election_id=None):
         if election_id != 0:
@@ -113,14 +130,14 @@ class ElectionAPIView(APIView):
                     election.status = 'Closed'
                     election.save()  # Update the status in the database
 
-                serializer = ElectionSerializer(election)
+                serializer = ElectionViewSerializer(election)
                 return Response(serializer.data, status=status.HTTP_200_OK)
             except Election.DoesNotExist:
                 return Response({"error": "Election not found"}, status=status.HTTP_404_NOT_FOUND)
         else:
             elections = Election.objects.annotate(
                 candidates_count=Count('candidates')).all()
-            serializer = ElectionSerializer(elections, many=True)
+            serializer = ElectionViewSerializer(elections, many=True)
             return Response(serializer.data, status=status.HTTP_200_OK)
 
 
@@ -130,7 +147,7 @@ class ElectionAdminAPIView(APIView):
             try:
                 election = Election.objects.get(id=election_id)
                 # Check if the expiry date is in the past
-                if election.expiry_date < date.today():
+                if election.expiry_date < timezone.now():
                     election.status = 'Closed'
                     election.save()  # Update the status in the database
 
@@ -140,11 +157,11 @@ class ElectionAdminAPIView(APIView):
                 return Response({"error": "Election not found"}, status=status.HTTP_404_NOT_FOUND)
         elif admin_id:
             elections = Election.objects.get(created_by=admin_id)
-            serializer = ElectionSerializer(elections, many=True)
+            serializer = ElectionViewSerializer(elections, many=True)
             return Response(serializer.data, status=status.HTTP_200_OK)
         else:
             elections = Election.objects.all()
-            serializer = ElectionSerializer(elections, many=True)
+            serializer = ElectionViewSerializer(elections, many=True)
             return Response(serializer.data, status=status.HTTP_200_OK)
 
 

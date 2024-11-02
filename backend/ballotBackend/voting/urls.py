@@ -27,4 +27,5 @@ urlpatterns = [
     path('check/password/election', check_password_for_election, name='add_vote'),
     path('admin/register/', register_admin, name='register_admin'),
     path('admin/login/', AdminLoginView.as_view(), name='login_admin'),
+    path('elections/<int:election_id>/update/', ElectionAPIView.as_view(), name='update-election'),
 ]

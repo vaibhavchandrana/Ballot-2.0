@@ -119,7 +119,7 @@ class ElectionSerializer(serializers.ModelSerializer):
         model = Election
         fields = ['id', 'election_name', 'generation_date',
                   'expiry_date', 'created_by', 'created_by_name',
-                  'access_type', 'status', 'candidates_count']
+                  'access_type', 'status', 'candidates_count','make_result_pubic',"password"]
 
     def get_candidates_count(self, obj):
         return obj.candidates.count()
@@ -132,6 +132,11 @@ class ElectionSerializer(serializers.ModelSerializer):
         password = data.get('password')
         generation_date = data.get('generation_date')
         expiry_date = data.get('expiry_date')
+        acess_method=data.get('access_type')
+        
+        if acess_method=="VIA_PASSWORD" and len(password)==0:
+            raise serializers.ValidationError(
+                "Password Can not be empty")
 
         # Check if election name and password are the same
         if election_name == password:
@@ -144,6 +149,25 @@ class ElectionSerializer(serializers.ModelSerializer):
                 "Expiry date must be greater than the generation date.")
 
         return data
+    
+
+class ElectionViewSerializer(serializers.ModelSerializer):
+    candidates_count = serializers.SerializerMethodField()
+    created_by_name = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Election
+        fields = ['id', 'election_name', 'generation_date',
+                  'expiry_date', 'created_by', 'created_by_name',
+                  'access_type', 'status', 'candidates_count','make_result_pubic']
+
+    def get_candidates_count(self, obj):
+        return obj.candidates.count()
+
+    def get_created_by_name(self, obj):
+        return obj.created_by.full_name if obj.created_by else None
+
+   
 
 class ElectionSerializerAdmin(serializers.ModelSerializer):
     class Meta:
@@ -181,3 +205,11 @@ class VoteSerializer(serializers.ModelSerializer):
         # Handle the creation of a Vote instance
         # Adjust the following line according to your model's fields and logic
         return Vote.objects.create(**validated_data)
+
+
+class ElectionPatchSerailizers(serializers.ModelSerializer):
+    class Meta:
+        model=Election
+        fields="__all__"
+    
+   

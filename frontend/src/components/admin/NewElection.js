@@ -5,12 +5,14 @@ import "../../css/admin.css";
 import { backendUrl } from "../../backendUrl";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+
 const initialState = {
   electionName: "",
   electionPass: "",
   fromDate: "",
   toDate: "",
   accessType: 1,
+  makeResultPublic: "true",
 };
 
 const ElectionForm = () => {
@@ -25,8 +27,9 @@ const ElectionForm = () => {
         expiry_date: formData.toDate,
         candidates: null,
         created_by: JSON.parse(localStorage.getItem("ballot_admin_id")),
-        access_type: formData.accessType == 0 ? "VIA_URL" : "OPEN_FOR_ALL",
+        access_type: formData.accessType == 0 ? "VIA_PASSWORD" : "OPEN_FOR_ALL",
         password: formData.electionPass,
+        make_result_public: formData.makeResultPublic === "true",
       };
 
       const response = await axios.post(
@@ -36,7 +39,7 @@ const ElectionForm = () => {
       navigate(`/admin/election/details/${response.data.id}`);
       localStorage.setItem("ballot_newElectionID", response.data.id);
       if (response.status == 201) {
-        toast.success("Election Added Sucessfully");
+        toast.success("Election Added Successfully");
       } else if (response.status == 400) {
         toast.error("Expiry date must be greater than the generation date.");
       }
@@ -48,10 +51,10 @@ const ElectionForm = () => {
   const [formData, setFormData] = useState(initialState);
 
   const handleInputChange = (e) => {
-    const { name, value } = e.target;
+    const { name, value, type, checked } = e.target;
     setFormData({
       ...formData,
-      [name]: value,
+      [name]: type === "checkbox" ? checked : value,
     });
   };
 
@@ -92,8 +95,8 @@ const ElectionForm = () => {
               value={formData.accessType}
               onChange={handleInputChange}
             >
-              <option value={1}>Open For All</option>
-              <option value={0}>Only By URL</option>
+              <option value={1}>Public</option>
+              <option value={0}>Password Protected</option>
             </Form.Control>
           </Col>
         </Form.Group>
@@ -112,7 +115,7 @@ const ElectionForm = () => {
                 type="text"
                 name="electionPass"
                 placeholder="Enter election key"
-                value={formData.electionUrl}
+                value={formData.electionPass}
                 onChange={handleInputChange}
               />
             </Col>
@@ -131,7 +134,7 @@ const ElectionForm = () => {
             <Row>
               <Col>
                 <Form.Control
-                  type="date"
+                  type="datetime-local"
                   name="fromDate"
                   placeholder="From Date"
                   value={formData.fromDate}
@@ -140,7 +143,7 @@ const ElectionForm = () => {
               </Col>
               <Col>
                 <Form.Control
-                  type="date"
+                  type="datetime-local"
                   name="toDate"
                   placeholder="To Date"
                   value={formData.toDate}
@@ -148,6 +151,40 @@ const ElectionForm = () => {
                 />
               </Col>
             </Row>
+          </Col>
+        </Form.Group>
+
+        <Form.Group
+          as={Row}
+          controlId="makeResultPublic"
+          className="election-form-group"
+        >
+          <Form.Label column sm={12} md={4}>
+            Make Result Public
+          </Form.Label>
+          <Col sm={12} md={4}>
+            <div style={{ display: "flex", alignItems: "center" }}>
+              <Form.Check
+                type="radio"
+                id="makeResultPublicYes"
+                name="makeResultPublic"
+                value="true"
+                checked={formData.makeResultPublic === "true"}
+                onChange={handleInputChange}
+                label="Yes"
+                style={{ marginRight: "8px" }}
+              />
+              <Form.Check
+                type="radio"
+                id="makeResultPublicNo"
+                name="makeResultPublic"
+                value="false"
+                checked={formData.makeResultPublic === "false"}
+                onChange={handleInputChange}
+                label="No"
+                style={{ marginRight: "8px" }}
+              />
+            </div>
           </Col>
         </Form.Group>
 

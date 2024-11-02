@@ -5,7 +5,8 @@ import { useEffect, useState } from "react";
 import { backendUrl } from "../../backendUrl";
 import { useNavigate } from "react-router-dom";
 import NoDataComponent from "../user/NoDataComponent";
-function ElectionItem({ electionList, usedIn }) {
+import axios from "axios";
+function ElectionItem({ electionList, usedIn, fetchElections }) {
   const [electionItems, setElectionItems] = useState([]);
   const [isAdmin, setIsAdmin] = useState(usedIn == "admin");
   const url = backendUrl();
@@ -26,6 +27,17 @@ function ElectionItem({ electionList, usedIn }) {
       setModalId(id);
     }
   };
+  async function handleElectionClose(id) {
+    const data = { status: "Closed" };
+    const response = await axios.patch(`${url}/elections/${id}/update/`, data);
+
+    if (response.status == 200) {
+      alert("Election updated");
+      let admin_id = localStorage.getItem("ballot_admin_id");
+      if (admin_id) await fetchElections(admin_id);
+      else await fetchElections();
+    }
+  }
   function showResult(id) {
     navigate(`/result/${id}`);
   }
@@ -50,23 +62,28 @@ function ElectionItem({ electionList, usedIn }) {
                 </Card.Text>
               </div>
               <div className="col-12 col-md-4 d-flex justify-content-end align-items-center gap-2 mt-2 mt-md-0">
-                {" "}
-                {new Date(item.expiry_date) > new Date() && (
+                {(new Date(item.expiry_date) > new Date() || isAdmin) && (
                   <Button
                     variant="primary"
                     onClick={() => handleShowModal(item.access_type, item.id)}
                   >
-                    Open
+                    View
                   </Button>
                 )}
-                {item.status == "Open" && (
-                  <Button variant="primary" onClick={() => showResult(item.id)}>
+
+                {isAdmin && item.status === "Open" && (
+                  <Button
+                    variant="primary"
+                    onClick={() => handleElectionClose(item.id)}
+                  >
                     Close Election
                   </Button>
                 )}
-                <Button variant="primary" onClick={() => showResult(item.id)}>
-                  Result
-                </Button>
+                {item.make_result_pubic && (
+                  <Button variant="primary" onClick={() => showResult(item.id)}>
+                    Result
+                  </Button>
+                )}
               </div>
             </Card.Body>
           </Card>

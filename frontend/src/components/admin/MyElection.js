@@ -12,13 +12,11 @@ const MyElctionList = () => {
   const [electionList, setElectionList] = useState([]);
   const [activeTab, setActiveTab] = useState("active");
   const navigate = useNavigate();
+  async function fetchElections(admin_id) {
+    const response = await axios.get(`${url}/get/elections/admin/${admin_id}`);
+    setElectionList(response.data);
+  }
   useEffect(() => {
-    async function fetchElections(admin_id) {
-      const response = await axios.get(
-        `${url}/get/elections/admin/${admin_id}`
-      );
-      setElectionList(response.data);
-    }
     let admin_id = localStorage.getItem("ballot_admin_id");
     if (admin_id) fetchElections(admin_id);
     else {
@@ -32,7 +30,10 @@ const MyElctionList = () => {
     const currentDate = new Date();
 
     electionList.forEach((election) => {
-      if (new Date(election.expiry_date) < currentDate) {
+      if (
+        new Date(election.expiry_date) < currentDate ||
+        election.status === "Closed"
+      ) {
         close.push(election);
       } else {
         open.push(election);
@@ -74,6 +75,7 @@ const MyElctionList = () => {
           <ElectionItem
             electionList={activeTab === "active" ? openElection : closeElection}
             usedIn={"admin"}
+            fetchElections={fetchElections}
           />
         </Card.Body>
       </Card>
